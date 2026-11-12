@@ -1,0 +1,56 @@
+name: B+LNZ Automated Risk Pipeline
+
+# 1. THE ALARM CLOCK: When to run the script
+on:
+  schedule:
+    - cron: '0 2 * * 1' # Runs every Monday at 2:00 AM UTC
+  workflow_dispatch: # Adds a manual "Run Now" button to your GitHub dashboard for testing
+
+# 2. THE COMPUTER: Setting up the temporary server
+jobs:
+  update-and-deploy:
+    runs-on: ubuntu-latest # GitHub creates a fresh Linux computer
+
+    steps:
+      # Step 1: Download your code from the GitHub repository onto the temporary computer
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      # Step 2: Install the R programming language
+      - name: Setup R
+        uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: 'release'
+
+      # Step 3: Install Linux system requirements (terra and geodata need these to draw maps)
+      - name: Install Map Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgdal-dev libgeos-dev libproj-dev libsqlite3-dev
+
+      # Step 4: Install all your required R packages
+      - name: Install R Packages
+        run: |
+          install.packages(c("ecmwfr", "terra", "dplyr", "stringr", "lubridate", "geosphere", "deSolve", "zoo", "geodata", "tidygeocoder", "leaflet", "plotly", "rsconnect"))
+        shell: Rscript {0}
+
+      # Step 5: Run your weekly math engine! 
+      # (It securely passes your hidden API key to the script)
+      - name: Run Weekly Updater Script
+        env:
+          ECMWF_API_KEY: ${{ secrets.ECMWF_API_KEY }}
+        run: source("weekly_updater.R")
+        shell: Rscript {0}
+
+      # Step 6: Push the new maps, databases, and app.R directly to shinyapps.io
+      - name: Deploy Dashboard to Shinyapps.io
+        env:
+          SHINY_TOKEN: ${{ secrets.SHINYAPPS_TOKEN }}
+          SHINY_SECRET: ${{ secrets.SHINYAPPS_SECRET }}
+        run: |
+          # Connects to your shinyapps.io account
+          rsconnect::setAccountInfo(name='tongwang0413', token=Sys.getenv('SHINY_TOKEN'), secret=Sys.getenv('SHINY_SECRET'))
+          
+          # Uploads everything to the live website
+          rsconnect::deployApp(appDir = '.', forceUpdate = TRUE)
+        shell: Rscript {0}
