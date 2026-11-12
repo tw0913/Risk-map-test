@@ -26,7 +26,7 @@ jobs:
       - name: Install Map Dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y libgdal-dev libgeos-dev libproj-dev libsqlite3-dev
+          sudo apt-get install -y libgdal-dev libgeos-dev libproj-dev libsqlite3-dev libsecret-1-dev
 
       # Step 4: Install all your required R packages
       - name: Install R Packages
