@@ -31,7 +31,7 @@ jobs:
       # Step 4: Install all your required R packages
       - name: Install R Packages
         run: |
-          install.packages(c("ecmwfr", "terra", "dplyr", "stringr", "lubridate", "geosphere", "deSolve", "zoo", "geodata", "tidygeocoder", "leaflet", "plotly", "rsconnect"))
+          install.packages(c("ecmwfr", "terra", "dplyr", "stringr", "lubridate", "geosphere", "deSolve", "zoo", "geodata", "tidygeocoder", "leaflet", "plotly", "shiny", "rsconnect"))
         shell: Rscript {0}
 
       # Step 5: Run your weekly math engine! 
