@@ -25,7 +25,7 @@ wf_set_key(user = "twang@kreavet.com", key = "98465c3a-9a6b-48e9-9118-acb9abcc23
 Sys.setenv(WF_USER = "twang@kreavet.com")
 
 # Automatically fetch the most recent available 7-day window
-end_date <- Sys.Date() - 6
+end_date <- Sys.Date() - 8
 start_date <- end_date - 6 
 
 # Check if this 7-day window crosses the July 1st annual reset date
@@ -305,7 +305,7 @@ for(i in 1:nrow(land_coords)) {
 print("Updating states and databases...")
 saveRDS(new_state, state_file)
 
-current_date <- as.character(Sys.Date())
+current_date <- as.character(end_date)
 history_db$H[[current_date]] <- risk_scores_H
 history_db$T[[current_date]] <- risk_scores_T
 reservoir_db$H[[current_date]] <- reservoir_scores_H
