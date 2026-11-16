@@ -24,10 +24,13 @@ library(geodata)
 wf_set_key(user = "twang@kreavet.com", key = "98465c3a-9a6b-48e9-9118-acb9abcc232f")
 Sys.setenv(WF_USER = "twang@kreavet.com")
 
-# TEMPORARY CLOUD CATCH-UP LOGIC
+# Automatically fetch the most recent available 7-day window
 end_date <- Sys.Date() - 8
-start_date <- as.Date("2026-07-01")
-is_reset_week <- TRUE
+start_date <- end_date - 6 
+
+# Check if this 7-day window crosses the July 1st annual reset date
+july_1 <- as.Date(paste0(format(end_date, "%Y"), "-07-01"))
+is_reset_week <- (start_date <= july_1) & (end_date >= july_1)
 
 print(paste("Fetching ERA5 data from", start_date, "to", end_date))
 
