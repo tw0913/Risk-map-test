@@ -10,11 +10,13 @@ on:
 jobs:
   update-and-deploy:
     runs-on: ubuntu-latest # GitHub creates a fresh Linux computer
+    permissions:
+      contents: write # Allows the server to save updated memory files back to GitHub
 
     steps:
       # Step 1: Download your code from the GitHub repository onto the temporary computer
       - name: Checkout Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       # Step 2: Install the R programming language
       - name: Setup R
@@ -34,7 +36,7 @@ jobs:
           install.packages(c("ecmwfr", "terra", "dplyr", "stringr", "lubridate", "geosphere", "deSolve", "zoo", "geodata", "tidygeocoder", "leaflet", "plotly", "shiny", "rsconnect"))
         shell: Rscript {0}
 
-      # Step 5: Run your weekly math engine! 
+      # Step 5: Run your weekly math engine!
       # (It securely passes your hidden API key to the script)
       - name: Run Weekly Updater Script
         env:
@@ -42,7 +44,16 @@ jobs:
         run: source("weekly_updater.R")
         shell: Rscript {0}
 
-      # Step 6: Push the new maps, databases, and app.R directly to shinyapps.io
+      # Step 6: Save the updated memory files back to GitHub permanently
+      - name: Commit and Push Updated Data
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add processed_data/
+          git diff --staged --quiet || git commit -m "Automated weekly risk update"
+          git push
+
+      # Step 7: Push the new maps, databases, and app.R directly to shinyapps.io
       - name: Deploy Dashboard to Shinyapps.io
         env:
           SHINY_TOKEN: ${{ secrets.SHINYAPPS_TOKEN }}
