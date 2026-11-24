@@ -49,7 +49,7 @@ jobs:
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          git add processed_data/
+          git add -A processed_data/
           git diff --staged --quiet || git commit -m "Automated weekly risk update"
           git push
 
@@ -63,5 +63,5 @@ jobs:
           rsconnect::setAccountInfo(name='tongwang0413', token=Sys.getenv('SHINY_TOKEN'), secret=Sys.getenv('SHINY_SECRET'))
           
           # Uploads everything to the live website
-          rsconnect::deployApp(appDir = '.', forceUpdate = TRUE)
+          rsconnect::deployApp(appDir = '.', appFiles = c('app.R', 'processed_data'), forceUpdate = TRUE)
         shell: Rscript {0}
