@@ -12,8 +12,8 @@ library(zoo)
 library(geodata)
 
 # ---- 0. Manual Testing Controls (Keep NULL / FALSE for normal automation) ----
-MANUAL_END_DATE <- NULL   # Example for test Step 1: as.Date("2026-11-08")
-FORCE_RESET     <- FALSE  # Set TRUE only when forcing a fresh July 1 baseline
+MANUAL_END_DATE <- as.Date("2026-11-08")   # Example for test Step 1: as.Date("2026-11-08")
+FORCE_RESET     <- TRUE  # Set TRUE only when forcing a fresh July 1 baseline
 
 # ---- 1. API Credentials ----
 # [ACTION REQUIRED BY B+LNZ]:
