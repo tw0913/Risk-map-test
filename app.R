@@ -331,7 +331,7 @@ ui <- fluidPage(
       
       tags$div(
         class = "custom-card",
-        tags$div("PASTURE WORM INGESTION RISK (2026)", class = "card-title"),
+        tags$div("PASTURE WORM INGESTION RISK", class = "card-title"),
         uiOutput("risk_chart_status"),
         div(
           style = "height:250px; min-height:250px; width:100%; position:relative;",
@@ -345,7 +345,7 @@ ui <- fluidPage(
       
       tags$div(
         class = "custom-card",
-        tags$div("LARVAL RESERVOIR (2026)", class = "card-title"),
+        tags$div("LARVAL RESERVOIR", class = "card-title"),
         uiOutput("reservoir_chart_status"),
         div(
           style = "height:250px; min-height:250px; width:100%; position:relative;",
