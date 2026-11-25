@@ -220,19 +220,88 @@ make_ticks <- function(labels, every = 14L) {
 # UI (Standard Shiny Layout - No bslib)
 # ------------------------------------------------------------
 
+# ------------------------------------------------------------
+# UI (Standard Shiny Layout - No bslib)
+# ------------------------------------------------------------
+
 ui <- fluidPage(
   tags$head(
     tags$style(HTML(paste0(
-      "#map { height: calc(100vh - 40px) !important; margin-top: 10px; border-radius: 5px; border: 1px solid #ccc; }",
-      ".side-panel { max-height: calc(100vh - 40px); overflow-y: auto; margin-top: 10px; }",
+      "#map { height: calc(100vh - 160px) !important; min-height: 520px; margin-top: 8px; border-radius: 5px; border: 1px solid #ccc; }",
+      ".side-panel { max-height: calc(100vh - 160px); min-height: 520px; overflow-y: auto; margin-top: 8px; }",
       ".plotly.html-widget { min-height:250px !important; }",
       ".js-plotly-plot { min-height:250px !important; }",
       ".custom-card { border: 1px solid #ddd; padding: 15px; border-radius: 5px; background: #fff; margin-bottom: 15px; }",
-      ".card-title { margin-top: 0; font-weight: bold; font-size: 1.1em; border-bottom: 1px solid #eee; padding-bottom: 8px; margin-bottom: 15px; }"
+      ".card-title { margin-top: 0; font-weight: bold; font-size: 1.1em; border-bottom: 1px solid #eee; padding-bottom: 8px; margin-bottom: 15px; }",
+      ".info-banner { background: #f8f9fa; border: 1px solid #dee2e6; border-left: 4px solid #1f4e79; border-radius: 5px; padding: 10px 14px; margin-bottom: 10px; font-size: 0.92em; }",
+      ".info-top-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; }",
+      ".info-pills { display: flex; flex-wrap: wrap; gap: 6px; }",
+      ".risk-pill { display: inline-block; padding: 2px 8px; border-radius: 12px; color: #fff; font-size: 0.82em; font-weight: 600; }",
+      ".pill-low { background: #44ad49; }",
+      ".pill-medhigh { background: linear-gradient(90deg, #f5a623, #e65c00); }",
+      ".pill-vhigh { background: #8b0000; }",
+      ".info-details { margin-top: 6px; }",
+      ".info-details summary { display: list-item; cursor: pointer; color: #1f4e79; font-weight: 600; font-size: 0.9em; outline: none; }",
+      ".info-details-body { margin-top: 10px; padding-top: 10px; border-top: 1px solid #e2e6ea; }",
+      ".info-guide-list { margin: 0 0 10px 0; padding-left: 18px; }",
+      ".info-guide-list li { margin-bottom: 4px; }",
+      ".info-disclaimer { font-style: italic; color: #495057; background: #fff; border: 1px solid #e2e6ea; border-radius: 4px; padding: 8px 10px; margin-bottom: 8px; font-size: 0.9em; }",
+      ".info-citation { font-size: 0.85em; color: #495057; margin: 0; }"
     )))
   ),
   
   titlePanel("Beef + Lamb New Zealand Worm Infection Risk Dashboard"),
+  
+  tags$div(
+    class = "info-banner",
+    tags$div(
+      class = "info-top-row",
+      tags$span(
+        "This interactive map displays the weekly risk of pasture contamination by infective ",
+        tags$em("Haemonchus contortus"), " and ", tags$em("Teladorsagia circumcincta"),
+        " (L3) sheep larvae across New Zealand."
+      ),
+      tags$div(
+        class = "info-pills",
+        tags$span("Low (0–25)", class = "risk-pill pill-low"),
+        tags$span("Medium–High (26–75)", class = "risk-pill pill-medhigh"),
+        tags$span("Very High (76–100)", class = "risk-pill pill-vhigh")
+      )
+    ),
+    tags$details(
+      class = "info-details",
+      tags$summary("Risk level guide, disclaimer & model citation"),
+      tags$div(
+        class = "info-details-body",
+        tags$ul(
+          class = "info-guide-list",
+          tags$li(
+            tags$strong("Low (0–25) — Baseline monitoring: "),
+            "Continue routine flock observation and standard grazing management."
+          ),
+          tags$li(
+            tags$strong("Medium–High (26–75) — Heightened alert: "),
+            "Closely monitor weather trends, pasture conditions, and flock health."
+          ),
+          tags$li(
+            tags$strong("Very High (76–100) — Action needed: "),
+            "Indicates a peak contamination period; prompt diagnostic checking and strategic grazing management are recommended."
+          )
+        ),
+        tags$div(
+          class = "info-disclaimer",
+          "Please note: Values represent a relative risk index driven by temperature and rainfall only. They are not absolute worm counts and do not account for farm management, treatments, or stocking density. Always interpret alongside local veterinary advice."
+        ),
+        tags$p(
+          class = "info-citation",
+          tags$strong("Model & Citation: "),
+          "Risk maps are generated using the GLOWORM-FL mechanistic model, adapted and validated for New Zealand conditions: ",
+          "Rose, H., Wang, T., van Dijk, J., & Morgan, E. R. (2015). GLOWORM-FL: a simulation model of the effects of climate and climate change on the free-living stages of gastrointestinal nematode parasites of ruminants. ",
+          tags$em("Ecological Modelling"), ", 297, 232–245."
+        )
+      )
+    )
+  ),
   
   sidebarLayout(
     sidebarPanel(
